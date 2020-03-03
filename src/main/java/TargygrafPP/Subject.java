@@ -20,6 +20,10 @@ public class Subject {
         this.prerequisites = new ArrayList<>();
     }
     
+    public void addPrerequisite(Subject prerequisite) {
+        prerequisites.add(prerequisite);
+    }
+    
     public Subject[] getPrerequisites() {
         return prerequisites.toArray(new Subject[0]);
     }
