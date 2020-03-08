@@ -1,6 +1,7 @@
 package spring_interface;
 
 import TargygrafPP.FakePDFReaderImplementation;
+import TargygrafPP.PReader;
 import TargygrafPP.Subject;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -15,7 +16,7 @@ public class Controller {
     @PostConstruct
     public void readSubjects() {
         Subject[] readSubjects = 
-                new FakePDFReaderImplementation().readSubjects(pdfPath);
+                new PReader().readSubjects(pdfPath);
         subjects = List.of(readSubjects);
     }
     

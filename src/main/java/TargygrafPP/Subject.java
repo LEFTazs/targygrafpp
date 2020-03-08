@@ -10,13 +10,15 @@ import lombok.Setter;
 public class Subject {
     private String name;
     private String code;
-    private short creditValue;
+    private int creditValue;
+    private short semester;
     private List<Subject> prerequisites;
     
-    public Subject(String name, String code, short creditValue) {
+    public Subject(String name, String code, short semester, int creditValue) {
         this.name = name;
         this.code = code;
         this.creditValue = creditValue;
+        this.semester = semester;
         this.prerequisites = new ArrayList<>();
     }
     
