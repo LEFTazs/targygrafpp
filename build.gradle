@@ -27,11 +27,11 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     
     //Springboot
-    implementation 'org.springframework.boot:spring-boot-dependencies:2.0.5.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-dependencies:2.0.5.RELEASE' exclude module: "logback-classic"
+    implementation 'org.springframework.boot:spring-boot-starter-web' exclude module: "logback-classic"
     
     //Appache
-    compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
+    //compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
     
     //Tablua
     compile 'com.github.tabulapdf:tabula-java:1.0.3'
