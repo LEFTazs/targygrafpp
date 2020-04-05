@@ -5,19 +5,23 @@ import TargygrafPP.PDFReader;
 import TargygrafPP.Subject;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Controller {
     List<Subject> subjects;
-    String pdfPath;
+    
+    @Autowired
+    private ExternalProperties properties;
     
     @PostConstruct
     public void readSubjects() {
         Subject[] readSubjects = 
-                new FakePDFReaderImplementation().readSubjects(pdfPath);
-        subjects = List.of(readSubjects);
+                new FakePDFReaderImplementation().readSubjects(properties.getPdfPath());
+
+        subjects = List.of(readSubjects); //TODO: PDFReader returns Null elements!!!
     }
     
     @GetMapping("/getsubjects")
