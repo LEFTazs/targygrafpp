@@ -19,7 +19,7 @@ public class Controller {
     @PostConstruct
     public void readSubjects() {
         Subject[] readSubjects = 
-                new FakePDFReaderImplementation().readSubjects(properties.getPdfPath());
+                new PDFReader().readSubjects(properties.getPdfPath());
 
         subjects = List.of(readSubjects); //TODO: PDFReader returns Null elements!!!
     }

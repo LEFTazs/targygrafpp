@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class Subject {
     private String name;
     private String code;
     private int creditValue;
-    private short semester;
+    private short semester; // A value of 0 would mean that it is a differential subject
     private List<Subject> prerequisites;
     
     public Subject(String name, String code, short semester, int creditValue) {

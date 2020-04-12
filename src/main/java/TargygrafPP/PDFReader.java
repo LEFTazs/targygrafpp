@@ -4,137 +4,125 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import technology.tabula.ObjectExtractor;
 import technology.tabula.Page;
+import technology.tabula.PageIterator;
+import technology.tabula.RectangularTextContainer;
 import technology.tabula.Table;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
 @Slf4j
-public class PDFReader implements PDFReaderInterface{
+public class PDFReader implements PDFReaderInterface {
+    private static PDDocument pdfDocument;
+    private static ObjectExtractor pageExtractor;
+    private static SpreadsheetExtractionAlgorithm tableExtractor;
+    
+    private static List<Page> pages;
+    private static Map<Integer, Table> tables;
+    
     @Override
     public Subject[] readSubjects(String filePath) {
-         //TABULA algorythms
-        PDDocument pd = null;
         try {
-            pd = PDDocument.load(new File(filePath));
+            pdfDocument = PDDocument.load(new File(filePath));
         } catch (IOException ex) {
-            log.error(ex.getMessage());  //TODO: saj·t Exception oszt·lyt dobni itt
+            throw new IllegalArgumentException("PDF couldn't be loaded from given path.");
         }
-        ObjectExtractor oe  = new ObjectExtractor(pd);
-        SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
+        pageExtractor  = new ObjectExtractor(pdfDocument);
+        tableExtractor = new SpreadsheetExtractionAlgorithm();
         
-        //Declaration
-        List<Page> pages = new ArrayList();
-        List<Table> tables = new ArrayList();
-        Map<Integer, List<Table>> semesters = new HashMap();
-        int NoSemesters = 0;
+        extractPages();
+        extractTables();
         
-        //Extracting PDF pages
-        for(int i = 1; i < 30; i++){
-            try{
-                Page page = oe.extract(i);
-                pages.add(page);
-            }catch(IndexOutOfBoundsException e){
-                break;
-            }
-        }
-        
-        //Extracting tables from pages
-        for(Page p: pages){
-            List<Table> table = sea.extract(p);
-            for(Table t : table)
-                tables.add(t);
-        }
-        
-        
-        for(int i = 0; i < tables.size(); i++){
-            if(tables.get(i).getCell(0, 0).getText(false).contains("tant·rgy neve")){
-                List<Table> currentTableList = new ArrayList();
-                currentTableList.add((tables.get(i)));
-                if(tables.get(i+1).getCell(0, 2).getText(false).charAt(1) == '+'){
-                    int j = i + 1;
-                    while(tables.get(j).getCell(0, 2).getText(false).charAt(1) == '+'){
-                        currentTableList.add(tables.get(j));
-                        j++;
-                    }
-                }
-                semesters.put(NoSemesters, currentTableList);
-                NoSemesters++;
-            }
-        }
-                
-        Subject[] subjects = new Subject[200];
-        int subjectCount = 0;
-        
-        for(int i = 0; i < NoSemesters; i++){
-            if(i != NoSemesters - 1){
-                for(int k = 0; k < semesters.get(i).size(); k++){
-                    
-                    Table table = semesters.get(i).get(k);
-                    
-                    for(int j = 1; j < 100; j++){
-                        try{
-                                                    
-                            String subjectName = table.getCell(j, 0).getText(false);
-                            String subjectCode = table.getCell(j, 1).getText(false);
-                            int subjectCredit = table.getCell(j, 3).getText(false).charAt(0);
-                            
-                            subjects[subjectCount] = new Subject(subjectName, subjectCode, (short) (i  + 1), subjectCredit);
-                            subjectCount++;
-                            
-                        }catch(NullPointerException e){ // NullPointerException
-                            break;
-                        }
-                    }
-                }
-            }
-            else{
-                
-                Table table = semesters.get(i).get(0);
-
-                for(int j = 1; j < 100; j++){
-                    try{
-
-                        String subjectName = table.getCell(j, 0).getText(false);
-                        String subjectCode = table.getCell(j, 1).getText(false);
-                        int subjectCredit = table.getCell(j, 3).getText(false).charAt(0);
-
-                        subjects[subjectCount] = new Subject(subjectName, subjectCode, (short) i, subjectCredit);
-                        subjectCount++;
-
-                    }catch(NullPointerException e){ // NullPointerException
-                        break;
-                    }
-                }
-                
-                for(int k = 1; k < semesters.get(i).size(); k++){
-                    
-                    table = semesters.get(i).get(k);
-                    
-                    for(int j = 1; j < 100; j++){
-                        try{
-
-                            String subjectName = table.getCell(j, 0).getText(false);
-                            String subjectCode = table.getCell(j, 1).getText(false);
-                            int subjectCredit = table.getCell(j, 3).getText(false).charAt(0);
-
-                            subjects[subjectCount] = new Subject(subjectName, subjectCode, (short) i, subjectCredit);
-                            subjectCount++;
-
-                        }catch(NullPointerException e){ // NullPointerException
-                            break;
-                        }
-                    }
-                }
-                
-            }
-        }
-
-        return subjects;
+        List<Subject> extractedSemesterSubjects = extractSemesterSubjects(8, 13);
+        List<Subject> extractedDifferentialSubjects = extractDifferentialSubjects(14, 16);
+        extractedSemesterSubjects.addAll(extractedDifferentialSubjects);
+        return extractedSemesterSubjects.toArray(new Subject[0]);
     }
     
+    private static void extractPages() {
+        pages = new ArrayList<>();
+        PageIterator pageIterator = pageExtractor.extract();
+        while (pageIterator.hasNext()) {
+            Page page = pageIterator.next();
+            pages.add(page);
+        }
+    }
+
+    private static void extractTables() {
+        tables = new HashMap<>();
+        for (Page page : pages) {
+            List<Table> tablesOfPage = tableExtractor.extract(page);
+            for (Table table : tablesOfPage)
+                tables.put(page.getPageNumber(), table);
+        }
+    }
+    
+    private static List<Subject> extractSemesterSubjects(int fromPage, int toPage) {
+        List<Subject> extractedSubjects = new ArrayList<>();
+        short currentSemester = 1;
+        for (Map.Entry<Integer, Table> entry : tables.entrySet()) {
+            int page = entry.getKey();
+            if (fromPage <= page && page <= toPage) {
+                Table table = entry.getValue();
+                List<List<RectangularTextContainer>> rows = table.getRows();
+                for (List<RectangularTextContainer> row : rows.subList(1, rows.size() - 1)) {
+                    Subject subject = extractSubjectFromRow(row, currentSemester);
+                    extractedSubjects.add(subject);
+                }
+                currentSemester++;
+            }
+        }
+        return extractedSubjects;
+    }
+    
+    private static Subject extractSubjectFromRow(List<RectangularTextContainer> row, short semester) {
+        Iterator<RectangularTextContainer> iterator = row.iterator();
+        String name = iterator.next().getText();
+        name = name.replace("\r", " ");
+        String code = iterator.next().getText();
+        iterator.next();
+        String creditCell = iterator.next().getText();
+        int creditValue = Integer.parseInt(creditCell.split("\r")[0]);
+        iterator.next();
+        iterator.next(); // TODO: prerequisite
+        
+        return new Subject(name, code, semester, creditValue);
+    }
+    
+    private static List<Subject> extractDifferentialSubjects(int fromPage, int toPage) {
+        List<Subject> extractedSubjects = new ArrayList<>();
+        short differentialSemesterId = 0;
+        for (Map.Entry<Integer, Table> entry : tables.entrySet()) {
+            int page = entry.getKey();
+            if (fromPage <= page && page <= toPage) {
+                Table table = entry.getValue();
+                List<List<RectangularTextContainer>> rows = table.getRows();
+                for (List<RectangularTextContainer> row : rows) {
+                    if (!row.get(1).getText().isBlank() && !"tant√°rgy neve".equals(row.get(0).getText())) {
+                        Subject subject = extractSubjectFromRow(row, differentialSemesterId);
+                        extractedSubjects.add(subject);
+                    }
+                }
+            }
+        }
+        return extractedSubjects;
+    }
+    
+    private static void printTables() {
+        for (Table table : tables.values()) {
+            System.out.println(table.getExtractionMethod());
+            List<List<RectangularTextContainer>> rows = table.getRows();
+            for (List<RectangularTextContainer> row : rows) {
+                for (RectangularTextContainer cell : row) {
+                    System.out.print(cell.getText() + "\t");
+                }
+                System.out.println("");
+            }
+        }
+    }
 }
