@@ -3,6 +3,7 @@ package TargygrafPP;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -89,9 +90,17 @@ public class PDFReader implements PDFReaderInterface {
         String creditCell = iterator.next().getText();
         int creditValue = Integer.parseInt(creditCell.split("\r")[0]);
         iterator.next();
-        iterator.next(); // TODO: prerequisite
+        String[] prerequisites = extractPrerequisites(iterator.next().getText());
         
-        return new Subject(name, code, semester, creditValue);
+        Subject subject = new Subject(name, code, semester, creditValue);
+        subject.setPrerequisites(prerequisites);
+        return subject;
+    }
+    
+    private static String[] extractPrerequisites(String cellContents) {
+        if (cellContents.equals("-"))
+            return new String[0];
+        else return cellContents.split("\r");
     }
     
     private static List<Subject> extractDifferentialSubjects(int fromPage, int toPage) {

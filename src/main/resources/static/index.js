@@ -12,7 +12,7 @@ function initalizePage() {
         $("#subjects").append("Kreditérték: " + data.creditValue + ", ");
         $("#subjects").append("<br>     Előfeltételek kódjai: ");
         $.each(data.prerequisites, function (j, prerequisite) {
-            $("#subjects").append(prerequisite.code + ", ");
+            $("#subjects").append(prerequisite + ", ");
         });
         $("#subjects").append("<br>");
     });

@@ -1,6 +1,7 @@
 package TargygrafPP;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ public class Subject {
     private String code;
     private int creditValue;
     private short semester; // A value of 0 would mean that it is a differential subject
-    private List<Subject> prerequisites;
+    private List<String> prerequisites;
     
     public Subject(String name, String code, short semester, int creditValue) {
         this.name = name;
@@ -24,11 +25,15 @@ public class Subject {
         this.prerequisites = new ArrayList<>();
     }
     
-    public void addPrerequisite(Subject prerequisite) {
+    public void addPrerequisite(String prerequisite) {
         prerequisites.add(prerequisite);
     }
     
-    public Subject[] getPrerequisites() {
-        return prerequisites.toArray(new Subject[0]);
+    public String[] getPrerequisites() {
+        return prerequisites.toArray(new String[0]);
+    }
+    
+    public void setPrerequisites(String[] prerequisites) {
+        this.prerequisites = Arrays.asList(prerequisites);
     }
 }
