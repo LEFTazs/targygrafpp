@@ -8,24 +8,23 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pdfreaders.TemplateReader;
 
 @RestController
 public class Controller {
-    List<Subject> subjects;
+    Subject[] subjects;
     
     @Autowired
     private ExternalProperties properties;
     
     @PostConstruct
     public void readSubjects() {
-        Subject[] readSubjects = 
-                new PDFReader().readSubjects(properties.getPdfPath());
-
-        subjects = List.of(readSubjects); //TODO: PDFReader returns Null elements!!!
+        TemplateReader.read(properties.getTemplatePath());
+        subjects = new PDFReader().readSubjects(properties.getPdfPath());
     }
     
     @GetMapping("/getsubjects")
     Subject[] getSubjects() {
-        return subjects.toArray(new Subject[0]);
+        return subjects;
     }
 }

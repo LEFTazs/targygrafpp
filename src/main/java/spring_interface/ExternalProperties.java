@@ -13,4 +13,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties
 public class ExternalProperties {
     private String pdfPath;
+    private String templatePath;
 }
