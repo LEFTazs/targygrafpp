@@ -1,4 +1,6 @@
-package TargygrafPP;
+package pdfreaders;
+
+import TargygrafPP.Subject;
 
 public class FakePDFReaderImplementation implements PDFReaderInterface {
 

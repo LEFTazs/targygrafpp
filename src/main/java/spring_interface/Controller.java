@@ -1,7 +1,7 @@
 package spring_interface;
 
-import TargygrafPP.FakePDFReaderImplementation;
-import TargygrafPP.PDFReader;
+import pdfreaders.FakePDFReaderImplementation;
+import pdfreaders.PDFReader;
 import TargygrafPP.Subject;
 import java.util.List;
 import javax.annotation.PostConstruct;
