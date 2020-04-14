@@ -1,6 +1,7 @@
 package pdfreaders;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import jj2000.j2k.NotImplementedError;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,82 +30,82 @@ public class Template {
     @ToString
     private class Property {
         private int collumn;
-        private String regex;
+        private Pattern regex;
     }
     
     public enum SemesterMode {
         INCREMENT {
             final private String errorMessage = "INCREMENT has no semester field";
             @Override
-            public int getSemester() {
+            public short getSemester() {
                 throw new NotImplementedError(errorMessage);
             }
             @Override
-            public void setSemester(int semester) {
+            public void setSemester(short semester) {
                 throw new NotImplementedError(errorMessage);
             }
         },
         CONSTANT {
-            private int semester;
+            private short semester;
 
             @Override
-            public int getSemester() {
+            public short getSemester() {
                 return semester;
             }
             @Override
-            public void setSemester(int semester) {
+            public void setSemester(short semester) {
                 this.semester = semester;
             }
         };
-        abstract public int getSemester();
-        abstract public void setSemester(int semester);
+        abstract public short getSemester();
+        abstract public void setSemester(short semester);
     }
     
-    public void setName(int page, String regex) {
-        this.name = new Property(page, regex);
+    public void setName(int collumn, String regex) {
+        this.name = new Property(collumn, Pattern.compile(regex));
     }
     
-    public void setCode(int page, String regex) {
-        this.code = new Property(page, regex);
+    public void setCode(int collumn, String regex) {
+        this.code = new Property(collumn, Pattern.compile(regex));
     }
     
-    public void setCredits(int page, String regex) {
-        this.credits = new Property(page, regex);
+    public void setCredits(int collumn, String regex) {
+        this.credits = new Property(collumn, Pattern.compile(regex));
     }
     
-    public void setPrerequisites(int page, String regex) {
-        this.prerequisites = new Property(page, regex);
+    public void setPrerequisites(int collumn, String regex) {
+        this.prerequisites = new Property(collumn, Pattern.compile(regex));
     }
     
-    public int getNamePage() {
+    public int getNameCollumn() {
         return this.name.getCollumn();
     }
     
-    public int getCodePage() {
+    public int getCodeCollumn() {
         return this.code.getCollumn();
     }
     
-    public int getCreditsPage() {
+    public int getCreditsCollumn() {
         return this.credits.getCollumn();
     }
     
-    public int getPrerequisitesPage() {
+    public int getPrerequisitesCollumn() {
         return this.prerequisites.getCollumn();
     }
     
-    public String getNameRegex() {
+    public Pattern getNameRegex() {
         return this.name.getRegex();
     }
     
-    public String getCodeRegex() {
+    public Pattern getCodeRegex() {
         return this.code.getRegex();
     }
     
-    public String getCreditsRegex() {
+    public Pattern getCreditsRegex() {
         return this.credits.getRegex();
     }
     
-    public String getPrerequisitesRegex() {
+    public Pattern getPrerequisitesRegex() {
         return this.prerequisites.getRegex();
     }
 }

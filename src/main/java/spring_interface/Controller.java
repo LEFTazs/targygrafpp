@@ -1,13 +1,12 @@
 package spring_interface;
 
-import pdfreaders.FakePDFReaderImplementation;
 import pdfreaders.PDFReader;
 import TargygrafPP.Subject;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pdfreaders.Template;
 import pdfreaders.TemplateReader;
 
 @RestController
@@ -19,8 +18,8 @@ public class Controller {
     
     @PostConstruct
     public void readSubjects() {
-        TemplateReader.read(properties.getTemplatePath());
-        subjects = new PDFReader().readSubjects(properties.getPdfPath());
+        Template[] templates = TemplateReader.read(properties.getTemplatePath());
+        subjects = new PDFReader().readSubjects(properties.getPdfPath(), templates);
     }
     
     @GetMapping("/getsubjects")

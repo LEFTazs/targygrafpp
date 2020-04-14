@@ -62,7 +62,7 @@ public class TemplateReader {
         if (mode.equals("pertable"))
             return Template.SemesterMode.INCREMENT;
         else {
-            int constant = Integer.valueOf(mode);
+            short constant = Short.valueOf(mode);
             Template.SemesterMode semesterMode = Template.SemesterMode.CONSTANT;
             semesterMode.setSemester(constant);
             return semesterMode;

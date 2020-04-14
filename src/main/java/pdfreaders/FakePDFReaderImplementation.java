@@ -5,7 +5,7 @@ import TargygrafPP.Subject;
 public class FakePDFReaderImplementation implements PDFReaderInterface {
 
     @Override
-    public Subject[] readSubjects(String filePath) {
+    public Subject[] readSubjects(String filePath, Template[] templates) {
         Subject[] fakeSubjects = new Subject[10];
         fakeSubjects[0] = new Subject("Programozás I.", "VEMIVIB142", (short)1, (short)2);
         fakeSubjects[1] = new Subject("Programozás II.", "VEMIVIB143",(short)1, (short)3);
