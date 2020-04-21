@@ -14,18 +14,16 @@ import technology.tabula.Table;
 @Slf4j
 public class PDFReader implements PDFReaderInterface {
     private TableExtractor extractor;
-    private Template[] templates;
     private Template currentTemplate;
+    private int currentTable;
     
     private List<Subject> extractedSubjects;
     
     @Override
     public Subject[] readSubjects(String filePath, Template[] templates) {
-        this.templates = templates;
-        
         this.extractor = new TableExtractor();
         this.extractor.extractTablesFromPDF(filePath);
-        
+                
         this.extractedSubjects = new ArrayList<>();
         for (Template template : templates) {
             this.currentTemplate = template;
@@ -36,30 +34,38 @@ public class PDFReader implements PDFReaderInterface {
     
     
     private void extractSubjectsWithCurrentTemplate() {
-        short currentSemester;
-        short stepSize;
-        Template.SemesterMode semesterMode = currentTemplate.getSemesterMode();
-        if (semesterMode == Template.SemesterMode.CONSTANT) {
-            currentSemester = semesterMode.getSemester();
-            stepSize = 0;
-        } else {
-            currentSemester = 1;
-            stepSize = 1;
-        }
-        
         Map<Integer, Table> tables = extractor.getTables();
+        this.currentTable = 0;
+        int pageInLastIteration = -1;
         for (Map.Entry<Integer, Table> entry : tables.entrySet()) {
             int page = entry.getKey();
             Table table = entry.getValue();
             if (isPageNeeded(page)) {
+                short currentSemester = chooseSemester(page, pageInLastIteration);
                 extractSubjectsFromTable(table, currentSemester);
-                currentSemester += stepSize;
             }
+            pageInLastIteration = page;
         }
     }
     
     private boolean isPageNeeded(int page) {
         return currentTemplate.getPages().contains(page);
+    }
+    
+    private short chooseSemester(int page, int pageInLastIteration) {
+        Template.SemesterMode semesterMode = currentTemplate.getSemesterMode();
+        if (semesterMode == Template.SemesterMode.CONSTANT) {
+            return semesterMode.getSemester();
+        } else if (semesterMode == Template.SemesterMode.INCREMENT) {
+            short semester = (short) currentTable;
+            
+            if (page == pageInLastIteration)
+                currentTable++;
+            
+            return semester;
+        }
+        
+        throw new RuntimeException("SemesterMode is unknown to PDFReader");
     }
     
     private void extractSubjectsFromTable(Table table, short currentSemester) {

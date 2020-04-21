@@ -59,7 +59,7 @@ public class TemplateReader {
     
     private static Template.SemesterMode castEntryToSemesterMode(Object entry) {
         String mode = entry.toString();
-        if (mode.equals("pertable"))
+        if (mode.equals("increment"))
             return Template.SemesterMode.INCREMENT;
         else {
             short constant = Short.valueOf(mode);
