@@ -1,0 +1,69 @@
+/*SUBJECTS*/
+#subjects{
+  font-size: 10px;
+  margin:10px;
+}
+.semesterblock{
+  display: inline-block;
+  text-align: center;
+  margin: 8px;
+  vertical-align: top;
+}
+.subject{
+  width: 200px;
+  border: 1px solid black;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.subjectname{
+  border: 1px solid blue;
+  border-radius: 4px;
+  margin:2px;
+}
+.subjectcode{
+  border: 1px solid blue;
+  border-radius: 4px;
+  margin:2px;
+}
+.subjectcredit{
+  border: 1px solid blue;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+/* NAVBAR */
+.navbar{
+  box-shadow: 0px 3px 4px #222222;
+  background-color: #f8f9fa;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(34,106,84);
+    font-size: 22px;
+}
+/*NAVBAR -> LOGIN*/
+.form-group{
+  margin:0;
+}
+.form-control{
+  font-size: 0.85rem;
+}
+#inputPassword{
+  background: url(img/passwordicon.png) no-repeat scroll 2px 1px;
+  background-color: white;
+  padding-left: 45px;
+}
+#inputUserName{
+  background: url(img/usericon.png) no-repeat scroll 2px 1px;
+  background-color: white;
+  padding-left: 45px;
+}
+.submitbutton{
+  background-color:rgb(34,106,84);
+  border-color: rgb(34,106,84);
+  color:white;
+  border-radius:5px;
+  padding:5px 12px;
+}
+.submitbutton:hover{
+
+}
