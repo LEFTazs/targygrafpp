@@ -35,7 +35,7 @@ public class PDFReader implements PDFReaderInterface {
     
     private void extractSubjectsWithCurrentTemplate() {
         Map<Integer, Table> tables = extractor.getTables();
-        this.currentTable = 0;
+        this.currentTable = 1;
         int pageInLastIteration = -1;
         for (Map.Entry<Integer, Table> entry : tables.entrySet()) {
             int page = entry.getKey();
@@ -58,10 +58,7 @@ public class PDFReader implements PDFReaderInterface {
             return semesterMode.getSemester();
         } else if (semesterMode == Template.SemesterMode.INCREMENT) {
             short semester = (short) currentTable;
-            
-            if (page == pageInLastIteration)
-                currentTable++;
-            
+            currentTable++;
             return semester;
         }
         
