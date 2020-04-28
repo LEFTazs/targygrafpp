@@ -3,5 +3,6 @@ package pdfreaders;
 import TargygrafPP.Subject;
 
 public interface PDFReaderInterface {
-    public Subject[] readSubjects(String filePath, Template[] templates);
+    public void readSubjects(String filePath, Template[] templates);
+    public Subject[] getExtractedSubjects();
 }

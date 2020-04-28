@@ -20,7 +20,7 @@ public class PDFReader implements PDFReaderInterface {
     private List<Subject> extractedSubjects;
     
     @Override
-    public Subject[] readSubjects(String filePath, Template[] templates) {
+    public void readSubjects(String filePath, Template[] templates) {
         this.extractor = new TableExtractor();
         this.extractor.extractTablesFromPDF(filePath);
                 
@@ -29,7 +29,6 @@ public class PDFReader implements PDFReaderInterface {
             this.currentTemplate = template;
             extractSubjectsWithCurrentTemplate();
         }
-        return extractedSubjects.toArray(new Subject[0]);
     }
     
     
@@ -124,5 +123,10 @@ public class PDFReader implements PDFReaderInterface {
         subject.setPrerequisites(prerequisites);
         
         extractedSubjects.add(subject);
+    }
+    
+    @Override
+    public Subject[] getExtractedSubjects() {
+        return extractedSubjects.toArray(new Subject[0]);
     }
 }

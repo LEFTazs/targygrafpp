@@ -3,38 +3,53 @@ package pdfreaders;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
 
 public class TemplateReader {
-    public static Template[] read(String filePath) {
+    private List<Template> templates;
+    @Getter private String curriculumName;
+    
+    public void read(String filePath) {
         Yaml yaml = new Yaml();
-        List<Template> templates = new ArrayList<>();
+        templates = new ArrayList<>();
         try {
             Iterable<Object> objects = yaml.loadAll(new FileReader(filePath));
-            for (Object object : objects) {
+            Iterator<Object> objectsIterator = objects.iterator();
+            
+            Object metadata = objectsIterator.next();
+            getCurriculumMetadata(metadata);
+            
+            while (objectsIterator.hasNext()) {
+                Object object = objectsIterator.next();
                 Template template = castToTemplate(object);
                 templates.add(template);
             }
         } catch (FileNotFoundException ex) {
             throw new IllegalArgumentException("YAML file not found");
         }
-        
-        return templates.toArray(new Template[0]);
     }
     
-    private static Template castToTemplate(Object object) {
+    private void getCurriculumMetadata(Object object) {
+        Map map = (Map) object;
+        curriculumName = map.get("name").toString();
+    }
+    
+    private Template castToTemplate(Object object) {
         Map map = (Map) object;
         List<Integer> pageNumbers = castEntryToNumberList(map.get("pages"));
         int collumnsize = castEntryToInt(map.get("collumnsize"));
         Template.SemesterMode semesterMode = castEntryToSemesterMode(map.get("semestermode"));
+        
         Template template = new Template(pageNumbers, collumnsize, semesterMode);
         template = setTemplateProperties(template, map);
         return template;
     }
     
-    private static List<Integer> castEntryToNumberList(Object entry) {
+    private List<Integer> castEntryToNumberList(Object entry) {
         String ranges = entry.toString();
         List<Integer> numberList = new ArrayList<>();
         for (String range : ranges.split(",")) {
@@ -53,11 +68,11 @@ public class TemplateReader {
         return numberList;
     }
     
-    private static int castEntryToInt(Object entry) {
+    private int castEntryToInt(Object entry) {
         return Integer.valueOf(entry.toString());
     }
     
-    private static Template.SemesterMode castEntryToSemesterMode(Object entry) {
+    private Template.SemesterMode castEntryToSemesterMode(Object entry) {
         String mode = entry.toString();
         if (mode.equals("increment"))
             return Template.SemesterMode.INCREMENT;
@@ -69,7 +84,7 @@ public class TemplateReader {
         }
     }
 
-    private static Template setTemplateProperties(Template template, Map map) {
+    private Template setTemplateProperties(Template template, Map map) {
         Map attributes;
         int col;
         String regex;
@@ -95,5 +110,9 @@ public class TemplateReader {
         template.setPrerequisites(col, regex);
         
         return template;
+    }
+    
+    public Template[] getTemplates() {
+        return templates.toArray(new Template[0]);
     }
 }

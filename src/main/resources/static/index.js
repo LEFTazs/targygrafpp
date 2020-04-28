@@ -3,10 +3,10 @@ window.onload = initalizePage;
 var subjects = null;
 
 function initalizePage() {
-    subjects = backendGet("/getsubjects");
-    console.log(subjects);
+    curriculums = backendGet("/getcurriculum/proginfo");
+    console.log(curriculums);
     $("#subjects").empty();
-    $.each(subjects, function (i, data) {
+    $.each(curriculums.subjects, function (i, data) {
         $("#subjects").append("Név: " + data.name + ", ");
         $("#subjects").append("Kód: " + data.code + ", ");
         $("#subjects").append("Kreditérték: " + data.creditValue + ", ");
