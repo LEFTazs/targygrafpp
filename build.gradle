@@ -37,4 +37,7 @@ dependencies {
     
     //Tablua
     compile 'com.github.tabulapdf:tabula-java:1.0.3'
+    
+    //YAML reader
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
 }

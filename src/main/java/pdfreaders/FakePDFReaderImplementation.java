@@ -1,9 +1,15 @@
-package TargygrafPP;
+package pdfreaders;
+
+import TargygrafPP.Subject;
 
 public class FakePDFReaderImplementation implements PDFReaderInterface {
 
     @Override
-    public Subject[] readSubjects(String filePath) {
+    public void readSubjects(String filePath, Template[] templates) {
+    }
+
+    @Override
+    public Subject[] getExtractedSubjects() {
         Subject[] fakeSubjects = new Subject[10];
         fakeSubjects[0] = new Subject("Programozás I.", "VEMIVIB142", (short)1, (short)2);
         fakeSubjects[1] = new Subject("Programozás II.", "VEMIVIB143",(short)1, (short)3);
@@ -21,6 +27,7 @@ public class FakePDFReaderImplementation implements PDFReaderInterface {
         fakeSubjects[9].addPrerequisite(fakeSubjects[7].getCode());
         fakeSubjects[9].addPrerequisite(fakeSubjects[8].getCode());
         return fakeSubjects;
+
     }
     
 }

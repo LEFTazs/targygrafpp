@@ -8,8 +8,11 @@ function bla(){
 var subjects = null;
 
 function initalizePage() {
-    subjects = backendGet("/getsubjects");
-    console.log(subjects);
+    curriculums = backendGet("/getcurriculum/proginfo");
+    subjects = curriculums.subjects;
+    allcuriculums = backendGet("/getallcurriculumids");
+    console.log(allcuriculums);
+    console.log(curriculums);
     $("#subjects").empty();
     //find semester count
     var semestermax = 0;
