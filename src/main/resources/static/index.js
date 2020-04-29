@@ -1,5 +1,10 @@
-window.onload = initalizePage;
+window.onload = bla;
+function bla(){
+  $("#editor").click(function(){
+    initalizePage();
 
+  });
+}
 var subjects = null;
 
 function initalizePage() {
@@ -16,7 +21,7 @@ function initalizePage() {
     console.log(semestermax);
     //semesters setup
     for(i = 1; i <= semestermax;i++){
-      $("#subjects").append("<div class='semesterblock'><strong>"+ i +".félév</strong></div>");
+      $("#subjects").append("<div class='semesterblock'><p class ='semestertitle'>"+ i +".félév</p></div>");
     }
     //load subjects to semesters
     for(i = 0; i < subjects.length; i++){
@@ -24,30 +29,69 @@ function initalizePage() {
                 "<div class='subject' id='"+ subjects[i].code +"'><div class='subjectname'>"+ subjects[i].name +"</div><div class='subjectcode'>"+ subjects[i].code +"</div><div class='subjectcredit'>"+ subjects[i].creditValue +"</div></div>");
     }
 
-    $(".subject").click(function(event){
-      var clickedSubject;
-        if($(this).hasClass("subject")){
-          clickedSubject = this.id;
-        }else{
-          clickedSubject = this.parent().id;
-        }
-
-      $("#"+clickedSubject).css("border-color","red");
-      for(i = 0; i <= semestermax;i++){
-        for(y= 0; y < subjects[i].prerequisites.length; y++){
-            console.log(subjects[i].prerequisites[y]);
-            console.log(clickedSubject);
-          if(subjects[i].prerequisites[y] == clickedSubject){
-            console.log(subjects[i].prerequisites[y]);
-            $("#"+subjects[i].code).css("background-color","green");
-          }
-        }
+    //load diff subjects
+    $("#subjects").append("<br><p class = 'semestertitle'>Differenciált szakmai ismeretek</p>");
+    for(i = 0; i < subjects.length; i++){
+      if(subjects[i].semester == 0){
+        $("#subjects").append("<div class='subject diffsubject' id='"+ subjects[i].code +"'><div class='subjectname'>"+ subjects[i].name +"</div><div class='subjectcode'>"+ subjects[i].code +"</div><div class='subjectcredit'>"+ subjects[i].creditValue +"</div></div>");
       }
+    }
 
+    //color effects
+    /*$(".subject").hover(function(event){
+      subjectClicked(this);
+    });
+    $(".subject").click(function(event){
+      subjectClicked(this);
+
+    });*/
+    var colorActive = false;
+      $(".subject").hover(function(event){
+        if(!colorActive){
+            subjectClicked(this);
+        }
+      });
+    $(".subject").click(function(event){
+      subjectClicked(this);
+    });
+    $("#subjects").click(function(event){
+      if(colorActive){
+        colorActive = false;
+      }else{
+        colorActive = true;
+      }
     });
 }
 
 
+function subjectClicked(clicked){
+  $(".subject").css("background-color","white");
+  $(".subject").css("border-color","rgb(195,195,195)");
+  $(".subject").css("border-width","1px");
+  var clickedSubject;
+    if($(clicked).hasClass("subject")){
+      clickedSubject = clicked.id;
+    }else{
+      clickedSubject = clicked.parent().id;
+    }
+  console.log(clickedSubject);
+  $("#"+clickedSubject).css("border-color","blue");
+  $("#"+clickedSubject).css("border-width","2px");
+  for(i = 0; i <= subjects.length;i++){
+    //preconditions
+    if(subjects[i].code == clickedSubject){
+        for(y= 0; y < subjects[i].prerequisites.length; y++){
+          $("#"+subjects[i].prerequisites[y]).css("background-color","rgb(221,188,0)");
+        }
+    }
+    for(y= 0; y < subjects[i].prerequisites.length; y++){
+      //avaiable
+      if(subjects[i].prerequisites[y] == clickedSubject){
+        $("#"+subjects[i].code).css("background-color","rgb(153,75,0)");
+      }
+    }
+  }
+}
 
 function backendGet(endpoint) {
     var url = "http://" + window.location.host + "/" + endpoint;

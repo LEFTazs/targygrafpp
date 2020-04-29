@@ -6,27 +6,38 @@
 .semesterblock{
   display: inline-block;
   text-align: center;
-  margin: 8px;
+  padding: 8px;
   vertical-align: top;
+  border-right: 2px dashed rgb(34,106,84);
+}
+.semestertitle{
+  font-weight: bold;
+  font-size: 16px;
 }
 .subject{
   width: 200px;
-  border: 1px solid black;
-  border-radius: 4px;
+  border: 1px solid rgb(195,195,195);
+  border-radius: 6px;
   margin-bottom: 10px;
 }
+.diffsubject{
+  display: inline-block;
+  vertical-align: top;
+  margin: 5px;
+  text-align: center;
+}
 .subjectname{
-  border: 1px solid blue;
+  background-color: rgb(195,195,195);
   border-radius: 4px;
   margin:2px;
 }
 .subjectcode{
-  border: 1px solid blue;
+  background-color: rgb(220,220,220);
   border-radius: 4px;
   margin:2px;
 }
 .subjectcredit{
-  border: 1px solid blue;
+  background-color: rgb(220,220,220);
   border-radius: 4px;
   margin: 2px;
 }
