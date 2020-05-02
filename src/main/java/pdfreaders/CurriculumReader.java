@@ -76,7 +76,8 @@ public class CurriculumReader {
     
     private boolean doFilesCorrespond(File file1, File file2) {
         String path1Id = getFileId(file1);
-        return file2.toString().contains(path1Id);
+        String path2Id = getFileId(file2);
+        return path2Id.equals(path1Id);
     }
     
     private String getFileId(File file) {
