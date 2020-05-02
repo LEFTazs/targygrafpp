@@ -1,0 +1,33 @@
+name: Mérnökinformatikus BSc.
+---
+pages: 8-13
+collumnsize: 7
+semestermode: increment
+name: 
+    col: 1
+    regex: "(?>.?\n?)+"
+code:
+    col: 2
+    regex: "((?>VE|KE|PE|NK|MI|MK|GT)[A-Z0-9]*)"
+credits:
+    col: 4
+    regex: "([0-9]{1,2})[\n][ ]*[0-9]+[ ]+[0-9]+"
+prerequisites:
+    col: 6
+    regex: "((?>VE|KE|PE|NK|MI|MK|GT)[A-Z0-9]*)[\n]?|-"
+---
+pages: 14-17
+collumnsize: 7
+semestermode: 0
+name: 
+    col: 1
+    regex: "(?>.?\n?)+"
+code:
+    col: 2
+    regex: "((?>VE|KE|PE|NK|MI|MK|GT)[A-Z0-9]*)"
+credits:
+    col: 4
+    regex: "([0-9]{1,2})[\n][ ]*[0-9]+[ ]+[0-9]+"
+prerequisites:
+    col: 6
+    regex: "((?>VE|KE|PE|NK|MI|MK|GT)[A-Z0-9]*)[\n]?|-"

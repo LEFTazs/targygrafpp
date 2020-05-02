@@ -1,0 +1,21 @@
+name: Mérnökinformatikus FOKSz
+---
+pages: 5-8
+collumnsize: 7
+semestermode: increment
+name: 
+    col: 1
+    regex: "(?>.?\n?)+"
+    header: "tantárgy neve"
+code:
+    col: 2
+    regex: "((?>VE|KE|PE|NK|MI|MK|GT)[A-Z0-9]*)"
+    header: "tantárgy kódja"
+credits:
+    col: 4
+    regex: "(?>([0-9]{1,2})(?>[\n][ ]*[0-9]+[ ]+[0-9]+)?)"
+    header: "kredit.*"
+prerequisites:
+    col: 6
+    regex: "((?>VE|KE|PE|NK|MI|MK|GT)[A-Z0-9]*)[\n]?|-|–|([0-9]*[ ][a-zA-Z]*)"
+    header: "előfeltétel"
