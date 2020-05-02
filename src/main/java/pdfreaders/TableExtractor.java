@@ -3,9 +3,7 @@ package pdfreaders;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.Getter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import technology.tabula.ObjectExtractor;
@@ -20,7 +18,8 @@ class TableExtractor {
     private SpreadsheetExtractionAlgorithm tableExtractor;
 
     @Getter private List<Page> pages;
-    @Getter private Map<Integer, Table> tables;
+    @Getter private List<Table> tables;
+    @Getter private List<Integer> pageOfTables;
 
     protected void extractTablesFromPDF(String filePath) {
         initalizeSubExtractors(filePath);
@@ -48,11 +47,14 @@ class TableExtractor {
     }
 
     private void extractTables() {
-        tables = new HashMap<>();
+        tables = new ArrayList<>();
+        pageOfTables = new ArrayList<>();
         for (Page page : pages) {
             List<Table> tablesOfPage = tableExtractor.extract(page);
-            for (Table table : tablesOfPage)
-                tables.put(page.getPageNumber(), table);
+            for (Table table : tablesOfPage) {
+                tables.add(table);
+                pageOfTables.add(page.getPageNumber());
+            }
         }
     }
 

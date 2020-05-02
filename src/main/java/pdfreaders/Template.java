@@ -2,7 +2,6 @@ package pdfreaders;
 
 import java.util.List;
 import java.util.regex.Pattern;
-import jj2000.j2k.NotImplementedError;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +30,13 @@ public class Template {
     private class Property {
         private int collumn;
         private Pattern regex;
+        private Pattern headerRegex;
+
+        public Property(int collumn, String regex, String headerRegex) {
+            this.collumn = collumn;
+            this.regex = Pattern.compile(regex);
+            this.headerRegex = Pattern.compile(headerRegex);
+        }
     }
     
     public enum SemesterMode {
@@ -38,11 +44,11 @@ public class Template {
             final private String errorMessage = "INCREMENT has no semester field";
             @Override
             public short getSemester() {
-                throw new NotImplementedError(errorMessage);
+                throw new UnsupportedOperationException(errorMessage);
             }
             @Override
             public void setSemester(short semester) {
-                throw new NotImplementedError(errorMessage);
+                throw new UnsupportedOperationException(errorMessage);
             }
         },
         CONSTANT {
@@ -61,20 +67,20 @@ public class Template {
         abstract public void setSemester(short semester);
     }
     
-    public void setName(int collumn, String regex) {
-        this.name = new Property(collumn, Pattern.compile(regex));
+    public void setName(int collumn, String regex, String headerRegex) {
+        this.name = new Property(collumn, regex, headerRegex);
     }
     
-    public void setCode(int collumn, String regex) {
-        this.code = new Property(collumn, Pattern.compile(regex));
+    public void setCode(int collumn, String regex, String headerRegex) {
+        this.code = new Property(collumn, regex, headerRegex);
     }
     
-    public void setCredits(int collumn, String regex) {
-        this.credits = new Property(collumn, Pattern.compile(regex));
+    public void setCredits(int collumn, String regex, String headerRegex) {
+        this.credits = new Property(collumn, regex, headerRegex);
     }
     
-    public void setPrerequisites(int collumn, String regex) {
-        this.prerequisites = new Property(collumn, Pattern.compile(regex));
+    public void setPrerequisites(int collumn, String regex, String headerRegex) {
+        this.prerequisites = new Property(collumn, regex, headerRegex);
     }
     
     public int getNameCollumn() {
@@ -107,5 +113,21 @@ public class Template {
     
     public Pattern getPrerequisitesRegex() {
         return this.prerequisites.getRegex();
+    }
+    
+    public Pattern getNameHeaderRegex() {
+        return this.name.getHeaderRegex();
+    }
+    
+    public Pattern getCodeHeaderRegex() {
+        return this.code.getHeaderRegex();
+    }
+    
+    public Pattern getCreditsHeaderRegex() {
+        return this.credits.getHeaderRegex();
+    }
+    
+    public Pattern getPrerequisitesHeaderRegex() {
+        return this.prerequisites.getHeaderRegex();
     }
 }

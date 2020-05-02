@@ -2,9 +2,7 @@ package pdfreaders;
 
 import TargygrafPP.Subject;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -31,19 +29,17 @@ public class PDFReader implements PDFReaderInterface {
         }
     }
     
-    
     private void extractSubjectsWithCurrentTemplate() {
-        Map<Integer, Table> tables = extractor.getTables();
-        this.currentTable = 1;
-        int pageInLastIteration = -1;
-        for (Map.Entry<Integer, Table> entry : tables.entrySet()) {
-            int page = entry.getKey();
-            Table table = entry.getValue();
+        List<Table> tables = extractor.getTables();
+        List<Integer> pageOfTables = extractor.getPageOfTables();
+        this.currentTable = 0;
+        for (int i = 0; i < tables.size(); i++) {
+            int page = pageOfTables.get(i);
+            Table table = tables.get(i);
             if (isPageNeeded(page)) {
-                short currentSemester = chooseSemester(page, pageInLastIteration);
+                short currentSemester = chooseSemester(table);
                 extractSubjectsFromTable(table, currentSemester);
             }
-            pageInLastIteration = page;
         }
     }
     
@@ -51,17 +47,47 @@ public class PDFReader implements PDFReaderInterface {
         return currentTemplate.getPages().contains(page);
     }
     
-    private short chooseSemester(int page, int pageInLastIteration) {
+    private short chooseSemester(Table table) {
         Template.SemesterMode semesterMode = currentTemplate.getSemesterMode();
         if (semesterMode == Template.SemesterMode.CONSTANT) {
             return semesterMode.getSemester();
         } else if (semesterMode == Template.SemesterMode.INCREMENT) {
-            short semester = (short) currentTable;
-            currentTable++;
-            return semester;
+            if (doesTableHaveHeader(table)) 
+                currentTable++;
+            return (short) currentTable;
         }
         
         throw new RuntimeException("SemesterMode is unknown to PDFReader");
+    }
+    
+    private boolean doesTableHaveHeader(Table table) {
+        int firstRowId = 0;
+        for (int i = 0; i < table.getColCount(); i++) {
+            String cell = convertCellToString(table.getCell(firstRowId, i));
+            int collumn = i + 1;
+            if (collumn == currentTemplate.getNameCollumn()) {
+                Pattern header = currentTemplate.getNameHeaderRegex();
+                Matcher matcher = header.matcher(cell);
+                if (!matcher.find()) 
+                    return false;
+            } else if (collumn == currentTemplate.getCodeCollumn()) {
+                Pattern header = currentTemplate.getCodeHeaderRegex();
+                Matcher matcher = header.matcher(cell);
+                if (!matcher.find()) 
+                    return false;
+            } else if (collumn == currentTemplate.getCreditsCollumn()) {
+                Pattern header = currentTemplate.getCreditsHeaderRegex();
+                Matcher matcher = header.matcher(cell);
+                if (!matcher.find()) 
+                    return false;
+            } else if (collumn == currentTemplate.getPrerequisitesCollumn()) {
+                Pattern header = currentTemplate.getPrerequisitesHeaderRegex();
+                Matcher matcher = header.matcher(cell);
+                if (!matcher.find()) 
+                    return false;
+            }
+        }
+        return true;
     }
     
     private void extractSubjectsFromTable(Table table, short currentSemester) {
@@ -78,8 +104,7 @@ public class PDFReader implements PDFReaderInterface {
         String[] prerequisites = new String[0];
         
         for (int i = 0; i < row.size(); i++) {
-            String cell = row.get(i).getText();
-            cell = cell.replace("\r", "\n");
+            String cell = convertCellToString(row.get(i));
             int collumn = i + 1;
             if (collumn == currentTemplate.getNameCollumn()) {
                 Pattern nameRegex = currentTemplate.getNameRegex();
@@ -123,6 +148,12 @@ public class PDFReader implements PDFReaderInterface {
         subject.setPrerequisites(prerequisites);
         
         extractedSubjects.add(subject);
+    }
+    
+    private String convertCellToString(RectangularTextContainer cell) {
+        String text = cell.getText();
+        text = text.replace("\r", "\n");
+        return text;
     }
     
     @Override
