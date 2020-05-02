@@ -13,6 +13,8 @@ public class TemplateReader {
     private List<Template> templates;
     @Getter private String curriculumName;
     
+    final String MATCH_ALL_PATTERN = ".*";
+    
     public void read(String filePath) {
         Yaml yaml = new Yaml();
         templates = new ArrayList<>();
@@ -88,26 +90,39 @@ public class TemplateReader {
         Map attributes;
         int col;
         String regex;
+        String headerRegex;
         
         attributes = (Map) map.get("name");
         col = castEntryToInt(attributes.get("col"));
         regex = attributes.get("regex").toString();
-        template.setName(col, regex);
+        if (attributes.containsKey("header"))
+            headerRegex = attributes.get("header").toString();
+        else headerRegex = MATCH_ALL_PATTERN;
+        template.setName(col, regex, headerRegex);
         
         attributes = (Map) map.get("code");
         col = castEntryToInt(attributes.get("col"));
         regex = attributes.get("regex").toString();
-        template.setCode(col, regex);
+        if (attributes.containsKey("header"))
+            headerRegex = attributes.get("header").toString();
+        else headerRegex = MATCH_ALL_PATTERN;
+        template.setCode(col, regex, headerRegex);
         
         attributes = (Map) map.get("credits");
         col = castEntryToInt(attributes.get("col"));
         regex = attributes.get("regex").toString();
-        template.setCredits(col, regex);
+        if (attributes.containsKey("header"))
+            headerRegex = attributes.get("header").toString();
+        else headerRegex = MATCH_ALL_PATTERN;
+        template.setCredits(col, regex, headerRegex);
         
         attributes = (Map) map.get("prerequisites");
         col = castEntryToInt(attributes.get("col"));
         regex = attributes.get("regex").toString();
-        template.setPrerequisites(col, regex);
+        if (attributes.containsKey("header"))
+            headerRegex = attributes.get("header").toString();
+        else headerRegex = MATCH_ALL_PATTERN;
+        template.setPrerequisites(col, regex, headerRegex);
         
         return template;
     }
