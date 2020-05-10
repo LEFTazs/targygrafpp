@@ -25,6 +25,14 @@ public class Subject {
         this.prerequisites = new ArrayList<>();
     }
     
+    public Subject(){
+        this.name = "Default";
+        this.code = null;
+        this.creditValue = 0;
+        this.semester = 0;
+        this.prerequisites = null;
+    }
+    
     public void addPrerequisite(String prerequisite) {
         prerequisites.add(prerequisite);
     }

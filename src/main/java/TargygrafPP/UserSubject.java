@@ -1,25 +1,24 @@
 package TargygrafPP;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class UserSubject {
     private Subject subject;
     private String[] lecturers;
-    private String semester;
-    private RequirementType requirement;
-    private int lectureHours;
-    private int practiceHours;
-    private int labHours;
+    private String attendedSemester;
     private boolean hasSignature;
-    private short mark;
+    private int mark;
         
 }
 
 enum RequirementType {
-    Exam,
-    Colloquium,
-    ContinuosExams
+    END_OF_SEMESTER_EXAM,
+    MID_TERM_EXAMS,
+    COLLOQUIUM,
+    SIGNATURE
 }
