@@ -1,8 +1,14 @@
 /*SUBJECTS*/
 #subjects{
   font-size: 10px;
-  margin:10px;
-  
+  text-align: center;
+}
+body{
+    user-select: none; /* supported by Chrome and Opera /
+   -webkit-user-select: none; / Safari /
+   -khtml-user-select: none; / Konqueror HTML /
+   -moz-user-select: none; / Firefox /
+   -ms-user-select: none; / Internet Explorer/Edge */
 }
 .semesterblock{
   display: inline-block;

@@ -1,13 +1,20 @@
 window.onload = getCurriculums;
 
 function getCurriculums(){
-  allcuriculums = backendGet("/getallcurriculumids");
+  allcuriculums = backendGet("/getallcurriculumnames");
+  allcuriculumsid = backendGet("/getallcurriculumids");
+  console.log(allcuriculums);
+  console.log(allcuriculumsid);
   allcuriculums.forEach(element =>
      $(".curriculums").append("<div class='curriculum'>"+ element +"</div>")
    );
    $(".curriculum").click(function(){
-     console.log(this.innerText);
-     initalizePage(this.innerText);
+     var selectedindex = 0;
+     for(var i = 0; i<allcuriculums.length;i++){
+       if(this.innerText == allcuriculums[i]){
+         initalizePage(allcuriculumsid[i]);
+       }
+     }
    });
 }
 var subjects = null;
