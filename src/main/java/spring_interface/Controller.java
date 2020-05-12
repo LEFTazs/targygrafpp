@@ -35,9 +35,17 @@ public class Controller {
     
     @GetMapping("/getallcurriculumids")
     String[] getAllCurriculumIds() {
-        String[] pdfIds = new String[curriculums.length];
-        for (int i = 0; i < pdfIds.length; i++)
-            pdfIds[i] = curriculums[i].getId();
-        return pdfIds;
+        String[] curriculumIds = new String[curriculums.length];
+        for (int i = 0; i < curriculumIds.length; i++)
+            curriculumIds[i] = curriculums[i].getId();
+        return curriculumIds;
+    }
+    
+    @GetMapping("/getallcurriculumnames")
+    String[] getAllCurriculumNames() {
+        String[] curriculumNames = new String[curriculums.length];
+        for (int i = 0; i < curriculumNames.length; i++)
+            curriculumNames[i] = curriculums[i].getName();
+        return curriculumNames;
     }
 }
