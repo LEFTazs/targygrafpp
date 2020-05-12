@@ -1,18 +1,22 @@
-window.onload = bla;
-function bla(){
-  $("#editor").click(function(){
-    initalizePage();
+window.onload = getCurriculums;
 
-  });
+function getCurriculums(){
+  allcuriculums = backendGet("/getallcurriculumids");
+  allcuriculums.forEach(element =>
+     $(".curriculums").append("<div class='curriculum'>"+ element +"</div>")
+   );
+   $(".curriculum").click(function(){
+     console.log(this.innerText);
+     initalizePage(this.innerText);
+   });
 }
 var subjects = null;
 
-function initalizePage() {
-    curriculums = backendGet("/getcurriculum/proginfo");
-    subjects = curriculums.subjects;
-    allcuriculums = backendGet("/getallcurriculumids");
-    console.log(allcuriculums);
-    console.log(curriculums);
+
+function initalizePage(curriculum) {
+    selectedCurriculum = backendGet("/getcurriculum/"+curriculum);
+    subjects = selectedCurriculum.subjects;
+    console.log(subjects);
     $("#subjects").empty();
     //find semester count
     var semestermax = 0;
@@ -48,7 +52,7 @@ function initalizePage() {
       subjectClicked(this);
 
     });*/
-    var colorActive = false;
+    var colorActive = true;
       $(".subject").hover(function(event){
         if(!colorActive){
             subjectClicked(this);
@@ -79,7 +83,7 @@ function subjectClicked(clicked){
     }
   console.log(clickedSubject);
   $("#"+clickedSubject).css("border-color","blue");
-  $("#"+clickedSubject).css("border-width","2px");
+  $("#"+clickedSubject).css("border-width","1px");
   for(i = 0; i <= subjects.length;i++){
     //preconditions
     if(subjects[i].code == clickedSubject){
