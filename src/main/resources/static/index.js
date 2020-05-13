@@ -44,9 +44,13 @@ function initalizePage(curriculum) {
     }
 
     //load diff subjects
-    $("#subjects").append("<br><p class = 'semestertitle'>Differenciált szakmai ismeretek</p>");
+    var addedTitle=false;
     for(i = 0; i < subjects.length; i++){
       if(subjects[i].semester == 0){
+          if (!addedTitle) {
+              $("#subjects").append("<br><p class = 'semestertitle'>Differenciált szakmai ismeretek</p>");
+              addedTitle=true;
+          }
         $("#subjects").append("<div class='subject diffsubject' id='"+ subjects[i].code +"'><div class='subjectname'>"+ subjects[i].name +"</div><div class='subjectcode'>"+ subjects[i].code +"</div><div class='subjectcredit'>"+ subjects[i].creditValue +"</div></div>");
       }
     }
