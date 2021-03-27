@@ -1,6 +1,6 @@
 package pdfreaders;
 
-import TargygrafPP.Subject;
+import pojos.Subject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -9,6 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import technology.tabula.RectangularTextContainer;
 import technology.tabula.Table;
 
+/**
+ * This is class handles the extraction of Subject objects from Tables.
+ * Given a list of Template objects, it uses that information to extract
+ * the Subject objects from the right location from the Tables.
+ * It uses TableExtractor to extract the tables.
+ */
 @Slf4j
 public class PDFReader implements PDFReaderInterface {
     private TableExtractor extractor;
@@ -17,6 +23,11 @@ public class PDFReader implements PDFReaderInterface {
     
     private List<Subject> extractedSubjects;
     
+    /**
+     * Using TableExtractor, extract all Subjects according to the given Templates.
+     * @param filePath Filepath of the PDF 
+     * @param templates List of previously extracted templates
+     */
     @Override
     public void readSubjects(String filePath, Template[] templates) {
         this.extractor = new TableExtractor();

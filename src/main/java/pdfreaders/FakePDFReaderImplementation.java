@@ -1,13 +1,23 @@
 package pdfreaders;
 
-import TargygrafPP.Subject;
+import pojos.Subject;
 
+/**
+ * Fake pdf reader, which returns hard coded subject information.
+ */
 public class FakePDFReaderImplementation implements PDFReaderInterface {
 
+    /**
+     * Does nothing, since this is a fake implementation.
+     */
     @Override
     public void readSubjects(String filePath, Template[] templates) {
     }
 
+    /**
+     * Return a few predefined, hard coded subjects.
+     * @return Array of fake subjects
+     */
     @Override
     public Subject[] getExtractedSubjects() {
         Subject[] fakeSubjects = new Subject[10];

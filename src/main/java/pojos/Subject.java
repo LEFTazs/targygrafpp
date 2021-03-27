@@ -1,4 +1,4 @@
-package TargygrafPP;
+package pojos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Information about a given subject is stored in this class.
+ * After the extraction from the curriculum files is done, the extracted
+ * information about one subject will be stored in this class.
+ * To represent differential subjects, give the semester field a value of 0.
+ * The prerequisites field stores a list of strings, which are the codes of
+ * other Subject objects. These are the prerequisites of this subject.
+ */
 @Getter
 @Setter
 @ToString

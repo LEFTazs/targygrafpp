@@ -1,16 +1,17 @@
 package pdfreaders;
 
-import TargygrafPP.Curriculum;
-import TargygrafPP.Subject;
+import pojos.Curriculum;
+import pojos.Subject;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
+/**
+ * This class holds together the whole Subject extraction process.
+ * Using TemplateReader, it extracts the found templates.
+ * Then, it provides these to the PDFReader, and finally joins all Subjects 
+ * into their respective curriculums.
+ */
 public class CurriculumReader {
     List<Curriculum> curriculums;
     private List<File> pdfFiles;
@@ -24,6 +25,12 @@ public class CurriculumReader {
         pdfReader = new PDFReader();
     }
     
+    /**
+     * Given a folder path, this method extracts all curriculums.
+     * Templates and PDFs are assigned to each other, based on their filenames.
+     * Files with the same base filename are assumed to belong to each other.
+     * @param pdfAndTemplateFolder Path to the folder containing all PDFs and templates
+     */
     public void read(String pdfAndTemplateFolder) {
         curriculums = new ArrayList<>();
         pdfFiles = new ArrayList<>();

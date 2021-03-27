@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Templates store information about how Subjects can be extracted from tables.
+ */
 @ToString
 public class Template {
     @Getter @Setter private List<Integer> pages;
@@ -39,6 +42,13 @@ public class Template {
         }
     }
     
+    /**
+     * The mode of how Subjects semester fields will be set.
+     * INCREMENT means, that each table's Subjects' semesters will be one more
+     * than the previous table's.
+     * CONSTANT method will give the same semester to all Subjects. Useful for
+     * differential subjects.
+     */
     public enum SemesterMode {
         INCREMENT {
             final private String errorMessage = "INCREMENT has no semester field";

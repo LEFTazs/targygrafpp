@@ -9,12 +9,20 @@ import java.util.Map;
 import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * This class extracts all templates from a given file.
+ */
 public class TemplateReader {
     private List<Template> templates;
     @Getter private String curriculumName;
     
     final String MATCH_ALL_PATTERN = ".*";
     
+    /**
+     * Given a yaml file, extract all found templates.
+     * @param filePath Filepath to the YAML file
+     * @throws IllegalArgumentException YAML was not found in provided path
+     */
     public void read(String filePath) {
         Yaml yaml = new Yaml();
         templates = new ArrayList<>();

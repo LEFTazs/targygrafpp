@@ -1,0 +1,21 @@
+name: Emberi erőforrások alapképzési szak
+---
+pages: 9-12
+collumnsize: 10
+semestermode: increment
+name: 
+    col: 1
+    regex: "(?>.?\n?)+"
+    #header: "Tantárgy"
+code:
+    col: 3
+    regex: "((?>VE|KE|PE|NK|MI|MK|GT)[A-Z0-9]+)"
+    #header: "KÓD"
+credits:
+    col: 4
+    regex: "([0-9]+)"
+    #header: "Kr."
+prerequisites:
+    col: 10
+    regex: "((?>VE|KE|PE|NK|MI|MK|GT)[A-Z0-9]+)[\n]?|-|–"
+    #header: "ELŐFELTÉTEL"

@@ -12,6 +12,11 @@ import technology.tabula.PageIterator;
 import technology.tabula.Table;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
+/**
+ * This class handles the first stage of extraction, it extracts tables from a pdf.
+ * The tables will be stored with respect to the page they reside in.
+ * The extracted pages can also be retrieved, if that's required.
+ */
 class TableExtractor {
     private PDDocument pdfDocument;
     private ObjectExtractor pageExtractor;
@@ -21,6 +26,10 @@ class TableExtractor {
     @Getter private List<Table> tables;
     @Getter private List<Integer> pageOfTables;
 
+    /**
+     * Given a pdf filepath, it extracts tables.
+     * @param filePath Filepath to the PDF that is to be extracted.
+     */
     protected void extractTablesFromPDF(String filePath) {
         initalizeSubExtractors(filePath);
         extractPages();
